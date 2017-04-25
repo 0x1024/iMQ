@@ -3,6 +3,7 @@
     <CLASSES>
       <root url="file://$PROJECT_DIR$/../sser" />
       <root url="file://$PROJECT_DIR$/../newser" />
+      <root url="file://$PROJECT_DIR$/../test-imq1" />
       <root url="file://$PROJECT_DIR$/../file_transs" />
       <root url="file://$PROJECT_DIR$/../aaa" />
       <root url="file://$PROJECT_DIR$/../file_trnass" />
@@ -16,6 +17,7 @@
       <root url="file://$PROJECT_DIR$/../tt4" />
       <root url="file://$PROJECT_DIR$/../RMS_Srv" />
       <root url="file://$PROJECT_DIR$/../github.com" />
+      <root url="file://$PROJECT_DIR$/../test-imq" />
       <root url="file://$PROJECT_DIR$/../google.golang.org" />
       <root url="file://$PROJECT_DIR$/../guitt" />
       <root url="file://$PROJECT_DIR$/../sourcegraph.com" />
@@ -34,6 +36,7 @@
     <SOURCES>
       <root url="file://$PROJECT_DIR$/../sser" />
       <root url="file://$PROJECT_DIR$/../newser" />
+      <root url="file://$PROJECT_DIR$/../test-imq1" />
       <root url="file://$PROJECT_DIR$/../file_transs" />
       <root url="file://$PROJECT_DIR$/../aaa" />
       <root url="file://$PROJECT_DIR$/../file_trnass" />
@@ -47,6 +50,7 @@
       <root url="file://$PROJECT_DIR$/../tt4" />
       <root url="file://$PROJECT_DIR$/../RMS_Srv" />
       <root url="file://$PROJECT_DIR$/../github.com" />
+      <root url="file://$PROJECT_DIR$/../test-imq" />
       <root url="file://$PROJECT_DIR$/../google.golang.org" />
       <root url="file://$PROJECT_DIR$/../guitt" />
       <root url="file://$PROJECT_DIR$/../sourcegraph.com" />
