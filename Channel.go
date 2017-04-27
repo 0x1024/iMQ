@@ -41,23 +41,24 @@ type WaitGroupWrapper struct{ sync.WaitGroup }
 
 
 
-func (ch *Channel) Notify(message interface{}) bool {
+func (ch *Channel) Notify(message []byte) bool {
 
 	ch.RLock()
 	defer ch.RUnlock()
 
-	for cid, _ := range ch.clients {
-		if ch.Callback != nil {
-			ch.Callback( message)
-		}else {
-			ch.ReplyMsg( message.(string))
+	for cid, v := range ch.clients {
+		if v.Ccb != nil {
+			v.Ccb( message,v.Para)
 		}
+		// else {
+			ch.ReplyMsg( message)
+		//}
 		fmt.Println(cid)
 	}
 	return true
 }
 
-func (ch *Channel) ReplyMsg(message string) {
+func (ch *Channel) ReplyMsg(message []byte) {
 	ch.waitGroup.Wrap(func() { fmt.Println(message) })
 }
 
@@ -79,7 +80,7 @@ type Channel struct {
 	waitGroup    WaitGroupWrapper
 	messageCount uint64
 	exitFlag     int32
-	Callback     func( interface{})
+	Callback     func( []byte)
 }
 
 func NewChannel(channelName string) *Channel {
@@ -106,7 +107,7 @@ func (ch *Channel) AddClient(client *Client) bool {
 func (ch *Channel) DeleteClient(client *Client) int {
 	var ret int
 	ch.ReplyMsg(
-		fmt.Sprintf("从channel:%s 中删除client:%d ", ch.Name, client.Id))
+		[]byte( fmt.Sprintf("从channel:%s 中删除client:%d ", ch.Name, client.Id)  ) )
 
 	ch.Lock()
 	delete(ch.clients, client.Id)
@@ -135,20 +136,20 @@ func (ch *Channel) Exit() {
 	ch.Wait()
 }
 
-func (ch *Channel) PutMessage(clientID int, message string) {
-	ch.RLock()
-	defer ch.RUnlock()
-
-	if ch.Exiting() {
-		return
-	}
-
-	//select {
-	// case <-t.exitChan:
-	// return
-	//}
-	fmt.Println(ch.Name, ":", message)
-
-	atomic.AddUint64(&ch.messageCount, 1)
-	return
-}
+//func (ch *Channel) PutMessage(clientID int, message string) {
+//	ch.RLock()
+//	defer ch.RUnlock()
+//
+//	if ch.Exiting() {
+//		return
+//	}
+//
+//	//select {
+//	// case <-t.exitChan:
+//	// return
+//	//}
+//	fmt.Println(ch.Name, ":", message)
+//
+//	atomic.AddUint64(&ch.messageCount, 1)
+//	return
+//}

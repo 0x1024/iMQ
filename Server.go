@@ -1,18 +1,32 @@
 package iMQ
 
 import (
-"errors"
-"sync"
+	"errors"
+	"sync"
 )
 
 type Client struct {
-	Id int
-	Ip string
+	Id   int
+	Name string       //can be ip addr
+	Ccb  func([]byte,interface{}) //Client call back
+	Para interface{}
+}
+
+type Topic struct {
+	Name string
+	Msg  []byte
+	Tcb  func([]byte) //topic call back
 }
 
 type Server struct {
 	Dict map[string]*Channel //map[Channel.Name]*Channel
 	sync.RWMutex
+}
+
+var Imqsrv Server
+
+func Init() {
+	Imqsrv.Dict = make(map[string]*Channel) //所有channel
 }
 
 func NewServer() *Server {
@@ -22,7 +36,7 @@ func NewServer() *Server {
 }
 
 //订阅
-func (srv *Server) Subscribe(client *Client, channelName string,cb func(interface{})) {
+func (srv *Server) Subscribe(client *Client, channelName string) {
 
 	// 客户是否在Channel的客户列表中
 	srv.RLock()
@@ -35,9 +49,7 @@ func (srv *Server) Subscribe(client *Client, channelName string,cb func(interfac
 		srv.Lock()
 		srv.Dict[channelName] = ch
 		srv.Unlock()
-		if cb != nil {
-			ch.Callback = cb
-		}
+
 	} else {
 		ch.AddClient(client)
 	}
@@ -59,9 +71,8 @@ func (srv *Server) Unsubscribe(client *Client, channelName string) {
 	}
 }
 
-
 //发布消息
-func (srv *Server) PublishMessage(channelName string, message interface{}) (bool, error) {
+func (srv *Server) PublishMessage(channelName string, message []byte) (bool, error) {
 	srv.RLock()
 	ch, found := srv.Dict[channelName]
 	if !found {
